@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#FA6F26" />
+    <meta name="description" content="Track learning challenges, habits, streaks, achievements, and roadmaps." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Challenge Dashboard" />
+    <title>Challenge Dashboard</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <a class="brand" href="#content" aria-label="Challenge Dashboard">
+          <span class="logo" aria-hidden="true">CD</span>
+          <span>
+            <strong>Challenge Dashboard</strong>
+            <small>Progress, streaks, achievements</small>
+          </span>
+        </a>
+        <div class="top-actions">
+          <button class="icon-btn" id="installBtn" type="button" hidden aria-label="Install app">⇩</button>
+          <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode">☾</button>
+          <button class="primary-btn" id="addChallengeBtn" type="button">Add Challenge</button>
+        </div>
+      </header>
+
+      <main id="content">
+        <section class="intro">
+          <div>
+            <p class="eyebrow">Offline-ready PWA</p>
+            <h1>Track skill-building challenges from first milestone to final win.</h1>
+          </div>
+          <button class="secondary-btn" id="addRoadmapBtn" type="button">New Roadmap</button>
+        </section>
+
+        <section class="stats" aria-label="Summary statistics">
+          <article><span>Total Challenges</span><strong id="totalStat">0</strong></article>
+          <article><span>Active Challenges</span><strong id="activeStat">0</strong></article>
+          <article><span>Completed Challenges</span><strong id="completedStat">0</strong></article>
+          <article><span>Current Daily Streak</span><strong id="currentStreakStat">0</strong></article>
+          <article><span>Longest Streak</span><strong id="longestStreakStat">0</strong></article>
+          <article><span>Completion Rate</span><strong id="rateStat">0%</strong></article>
+        </section>
+
+        <section class="controls" aria-label="Search, filters, and sorting">
+          <label class="search">
+            <span class="sr-only">Search challenges</span>
+            <input id="searchInput" type="search" autocomplete="off" placeholder="Search challenges, descriptions, skills..." />
+          </label>
+          <div class="selects">
+            <label>Category<select id="categoryFilter"></select></label>
+            <label>Difficulty<select id="difficultyFilter"></select></label>
+            <label>Skill<select id="skillFilter"></select></label>
+            <label>Status<select id="statusFilter"></select></label>
+            <label>Sort<select id="sortSelect"></select></label>
+          </div>
+        </section>
+
+        <div class="layout">
+          <section class="main-column" aria-label="Challenges">
+            <section class="group">
+              <div class="section-title"><div><p class="eyebrow">1-3 days</p><h2>Micro Challenges</h2></div><span id="microCount">0</span></div>
+              <div class="cards" id="microList"></div>
+            </section>
+            <section class="group">
+              <div class="section-title"><div><p class="eyebrow">1-2 weeks</p><h2>Weekly Challenges</h2></div><span id="weeklyCount">0</span></div>
+              <div class="cards" id="weeklyList"></div>
+            </section>
+            <section class="group">
+              <div class="section-title"><div><p class="eyebrow">1-3 months</p><h2>Monthly Challenges</h2></div><span id="monthlyCount">0</span></div>
+              <div class="cards" id="monthlyList"></div>
+            </section>
+          </section>
+
+          <aside class="side-column">
+            <section class="panel">
+              <div class="section-title compact"><h2>Achievements</h2></div>
+              <div class="achievement-list" id="achievementList"></div>
+            </section>
+            <section class="panel">
+              <div class="section-title compact"><h2>Roadmaps</h2><button class="small-btn" id="sideRoadmapBtn" type="button">Add</button></div>
+              <div class="roadmap-list" id="roadmapList"></div>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <dialog id="challengeDialog">
+      <form method="dialog" class="modal" id="challengeForm">
+        <header><h2>Add Challenge</h2><button type="button" class="icon-btn close-dialog" aria-label="Close">×</button></header>
+        <div class="form-grid">
+          <label class="wide">Challenge Name<input name="name" required maxlength="80" placeholder="Learn Git in 1 Week" /></label>
+          <label class="wide">Description<textarea name="description" required maxlength="240" placeholder="Practice a focused skill with measurable milestones."></textarea></label>
+          <label>Category<select name="category"><option>Micro Challenge</option><option>Weekly Challenge</option><option>Monthly Challenge</option></select></label>
+          <label>Skill Type<select name="skillType"><option>Programming</option><option>Fitness</option><option>Language</option><option>Creativity</option><option>Productivity</option><option>Lifestyle</option><option>Custom</option></select></label>
+          <label>Difficulty<select name="difficulty"><option>Easy</option><option>Medium</option><option>Hard</option></select></label>
+          <label>Start Date<input name="startDate" type="date" required /></label>
+          <label>Target Date<input name="targetDate" type="date" required /></label>
+          <label>Total Milestones<input name="totalMilestones" type="number" min="1" max="500" value="10" required /></label>
+        </div>
+        <footer><button type="button" class="secondary-btn close-dialog">Cancel</button><button class="primary-btn" value="default">Create Challenge</button></footer>
+      </form>
+    </dialog>
+
+    <dialog id="roadmapDialog">
+      <form method="dialog" class="modal" id="roadmapForm">
+        <header><h2>New Roadmap</h2><button type="button" class="icon-btn close-dialog" aria-label="Close">×</button></header>
+        <div class="form-grid">
+          <label class="wide">Roadmap Name<input name="name" required maxlength="80" placeholder="AI Engineer Roadmap" /></label>
+          <label class="wide">Steps<textarea name="steps" required placeholder="Learn Git&#10;Learn Python&#10;Learn NumPy&#10;Build AI Project"></textarea></label>
+        </div>
+        <footer><button type="button" class="secondary-btn close-dialog">Cancel</button><button class="primary-btn" value="default">Create Roadmap</button></footer>
+      </form>
+    </dialog>
+
+    <div id="toastRegion" class="toasts" aria-live="polite" aria-atomic="true"></div>
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
